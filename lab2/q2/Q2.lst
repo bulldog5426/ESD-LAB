@@ -1,0 +1,179 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 4807            LDR              R0, =array  ; Load the base add
+                                                            ress of the array i
+                                                            nto R0
+   14 00000002 4908            LDR              R1, =array_end ; Load the end a
+                                                            ddress of the array
+                                                             into R1
+   15 00000004 F1A1 0104       SUB              R1, R1, #4  ; Adjust R1 to poin
+                                                            t to the last eleme
+                                                            nt of the array
+   16 00000008         
+   17 00000008         reverse_loop
+   18 00000008 4288            CMP              R0, R1      ; Compare start and
+                                                             end pointers
+   19 0000000A DA08            BGE              end_reverse ; If start >= end, 
+                                                            exit the loop
+   20 0000000C         
+   21 0000000C 6802            LDR              R2, [R0]    ; Load the value at
+                                                             R0 into R2
+   22 0000000E 680B            LDR              R3, [R1]    ; Load the value at
+                                                             R1 into R3
+   23 00000010         
+   24 00000010 600A            STR              R2, [R1]    ; Store the value f
+                                                            rom R0 into R1
+   25 00000012 6003            STR              R3, [R0]    ; Store the value f
+                                                            rom R1 into R0
+   26 00000014         
+   27 00000014 F100 0004       ADD              R0, R0, #4  ; Move R0 to the ne
+                                                            xt element
+   28 00000018 F1A1 0104       SUB              R1, R1, #4  ; Move R1 to the pr
+                                                            evious element
+   29 0000001C         
+   30 0000001C E7F4            B                reverse_loop ; Repeat the proce
+                                                            ss
+   31 0000001E         
+   32 0000001E         end_reverse
+   33 0000001E E7FE            B                end_reverse ; Infinite loop to 
+                                                            end the program
+   34 00000020         
+   35 00000020 00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   36 00000000         array
+   37 00000000 11111111 
+              22222222 
+              33333333 
+              44444444 
+              55555555         DCD              0x11111111, 0x22222222, 0x33333
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+333, 0x44444444, 0x55555555
+   38 00000014 66666666 
+              77777777 
+              88888888 
+              99999999 
+              AAAAAAAA         DCD              0x66666666, 0x77777777, 0x88888
+888, 0x99999999, 0xAAAAAAAA
+   39 00000028         array_end
+   40 00000028                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=Q2.d -oQ
+2.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=Q2.lst Q2.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file Q2.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file Q2.asm
+   Uses
+      At line 2 in file Q2.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file Q2.asm
+   Uses
+      At line 5 in file Q2.asm
+      At line 10 in file Q2.asm
+
+end_reverse 0000001E
+
+Symbol: end_reverse
+   Definitions
+      At line 32 in file Q2.asm
+   Uses
+      At line 19 in file Q2.asm
+      At line 33 in file Q2.asm
+
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file Q2.asm
+   Uses
+      None
+Comment: mycode unused
+reverse_loop 00000008
+
+Symbol: reverse_loop
+   Definitions
+      At line 17 in file Q2.asm
+   Uses
+      At line 30 in file Q2.asm
+Comment: reverse_loop used once
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+array 00000000
+
+Symbol: array
+   Definitions
+      At line 36 in file Q2.asm
+   Uses
+      At line 13 in file Q2.asm
+Comment: array used once
+array_end 00000028
+
+Symbol: array_end
+   Definitions
+      At line 39 in file Q2.asm
+   Uses
+      At line 14 in file Q2.asm
+Comment: array_end used once
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 35 in file Q2.asm
+   Uses
+      None
+Comment: mydata unused
+3 symbols
+342 symbols in table

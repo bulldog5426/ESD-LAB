@@ -1,0 +1,4 @@
+Dependencies for Project 'q1', Target 'Target 1': (DO NOT MODIFY !)
+F (.\q1.asm)(0x66B98CCC)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\NXP\LPC17xx --list "q1.lst" --xref -o "q1.o" --depend "q1.d")
+F (.\q1a.asm)(0x66B98F7F)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\NXP\LPC17xx --list "q1a.lst" --xref -o "q1a.o" --depend "q1a.d")
+F (.\q1b.asm)(0x66B98F7F)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\NXP\LPC17xx --list "q1b.lst" --xref -o "q1b.o" --depend "q1b.d")
