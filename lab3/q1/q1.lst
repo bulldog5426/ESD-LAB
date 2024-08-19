@@ -1,0 +1,178 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 4806            LDR              R0, =numbers ; Load the base ad
+                                                            dress of the number
+                                                            s into R0
+   14 00000002 F04F 010A       MOV              R1, #10     ; Load the loop cou
+                                                            nter with 10 (for 1
+                                                            0 numbers)
+   15 00000006 F04F 0200       MOV              R2, #0      ; Clear R2 to accum
+                                                            ulate the sum
+   16 0000000A         
+   17 0000000A         sum_loop
+   18 0000000A F850 3B04       LDR              R3, [R0], #4 ; Load the next nu
+                                                            mber into R3, post-
+                                                            increment R0
+   19 0000000E 441A            ADD              R2, R2, R3  ; Add the number in
+                                                             R3 to the accumula
+                                                            tor R2
+   20 00000010 1E49            SUBS             R1, R1, #1  ; Decrement the loo
+                                                            p counter
+   21 00000012 D1FA            BNE              sum_loop    ; If R1 is not zero
+                                                            , branch back to su
+                                                            m_loop
+   22 00000014         
+   23 00000014 4802            LDR              R0, =result ; Load the address 
+                                                            of the result varia
+                                                            ble
+   24 00000016 6002            STR              R2, [R0]    ; Store the accumul
+                                                            ated sum into the r
+                                                            esult
+   25 00000018         
+   26 00000018         STOP
+   27 00000018 E7FE            B                STOP        ; Infinite loop to 
+                                                            stop the program
+   28 0000001A         
+   29 0000001A 00 00 00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   30 00000000         result
+   31 00000000 00000000        DCD              0           ; Reserve a word to
+                                                             store the result
+   32 00000004         
+   33 00000004                 AREA             mycode, CODE, READONLY
+   34 00000024         numbers
+   35 00000024 11111111 
+              22222222 
+              33333333 
+              44444444 
+              55555555         DCD              0x11111111, 0x22222222, 0x33333
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+333, 0x44444444, 0x55555555
+   36 00000038 66666666 
+              77777777 
+              88888888 
+              99999999 
+              AAAAAAAA         DCD              0x66666666, 0x77777777, 0x88888
+888, 0x99999999, 0xAAAAAAAA
+   37 0000004C         
+   38 0000004C                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=q1.d -oq
+1.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=q1.lst q1.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file q1.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file q1.asm
+   Uses
+      At line 2 in file q1.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file q1.asm
+   Uses
+      At line 5 in file q1.asm
+      At line 10 in file q1.asm
+
+STOP 00000018
+
+Symbol: STOP
+   Definitions
+      At line 26 in file q1.asm
+   Uses
+      At line 27 in file q1.asm
+Comment: STOP used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file q1.asm
+   Uses
+      None
+Comment: mycode unused
+numbers 00000024
+
+Symbol: numbers
+   Definitions
+      At line 34 in file q1.asm
+   Uses
+      At line 13 in file q1.asm
+Comment: numbers used once
+sum_loop 0000000A
+
+Symbol: sum_loop
+   Definitions
+      At line 17 in file q1.asm
+   Uses
+      At line 21 in file q1.asm
+Comment: sum_loop used once
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 29 in file q1.asm
+   Uses
+      None
+Comment: mydata unused
+result 00000000
+
+Symbol: result
+   Definitions
+      At line 30 in file q1.asm
+   Uses
+      At line 23 in file q1.asm
+Comment: result used once
+2 symbols
+342 symbols in table

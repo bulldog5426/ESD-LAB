@@ -1,0 +1,172 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 4809            LDR              R0, =n      ; Load address of t
+                                                            he number n
+   14 00000002 490A            LDR              R1, =result ; Load address wher
+                                                            e the result will b
+                                                            e stored
+   15 00000004         
+   16 00000004 6802            LDR              R2, [R0]    ; Load the value of
+                                                             n into R2
+   17 00000006 F04F 0300       MOV              R3, #0      ; Initialize the su
+                                                            m to 0
+   18 0000000A F04F 0401       MOV              R4, #1      ; Initialize the lo
+                                                            op counter to 1
+   19 0000000E         
+   20 0000000E         ; Loop to compute the sum using MLA
+   21 0000000E         sum_loop
+   22 0000000E FB04 3304       MLA              R3, R4, R4, R3 
+                                                            ; R3 = R3 + R4 * R4
+                                                            
+   23 00000012 F104 0401       ADD              R4, R4, #1  ; Increment the loo
+                                                            p counter
+   24 00000016 4294            CMP              R4, R2      ; Compare loop coun
+                                                            ter with n
+   25 00000018 DDF9            BLE              sum_loop    ; If loop counter <
+                                                            = n, repeat the loo
+                                                            p
+   26 0000001A         
+   27 0000001A         ; Divide the sum by 2 to get the final result
+   28 0000001A F04F 0502       MOV              R5, #2
+   29 0000001E FBB3 F3F5       UDIV             R3, R3, R5  ; Divide the accumu
+                                                            lated sum by 2
+   30 00000022         
+   31 00000022 600B            STR              R3, [R1]    ; Store the result 
+                                                            in memory
+   32 00000024         
+   33 00000024         STOP
+   34 00000024 E7FE            B                STOP        ; Infinite loop to 
+                                                            stop the program
+   35 00000026         
+   36 00000026 00 00 00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   37 00000000 0000000A 
+                       n       DCD              10          ; Number of natural
+                                                             numbers (change as
+                                                             needed)
+   38 00000004         result
+   39 00000004 00000000        DCD              0           ; Reserve a word to
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                             store the result
+   40 00000008         
+   41 00000008                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=a2.d -oa
+2.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=a2.lst a2.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file a2.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file a2.asm
+   Uses
+      At line 2 in file a2.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file a2.asm
+   Uses
+      At line 5 in file a2.asm
+      At line 10 in file a2.asm
+
+STOP 00000024
+
+Symbol: STOP
+   Definitions
+      At line 33 in file a2.asm
+   Uses
+      At line 34 in file a2.asm
+Comment: STOP used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file a2.asm
+   Uses
+      None
+Comment: mycode unused
+sum_loop 0000000E
+
+Symbol: sum_loop
+   Definitions
+      At line 21 in file a2.asm
+   Uses
+      At line 25 in file a2.asm
+Comment: sum_loop used once
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 36 in file a2.asm
+   Uses
+      None
+Comment: mydata unused
+n 00000000
+
+Symbol: n
+   Definitions
+      At line 37 in file a2.asm
+   Uses
+      At line 13 in file a2.asm
+Comment: n used once
+result 00000004
+
+Symbol: result
+   Definitions
+      At line 38 in file a2.asm
+   Uses
+      At line 14 in file a2.asm
+Comment: result used once
+3 symbols
+342 symbols in table

@@ -1,0 +1,198 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 480B            LDR              R0, =a      ; Load address of f
+                                                            irst number (a)
+   14 00000002 490C            LDR              R1, =b      ; Load address of s
+                                                            econd number (b)
+   15 00000004 4A0C            LDR              R2, =result ; Load address wher
+                                                            e the result will b
+                                                            e stored
+   16 00000006         
+   17 00000006 6803            LDR              R3, [R0]    ; Load the value of
+                                                             a into R3
+   18 00000008 680C            LDR              R4, [R1]    ; Load the value of
+                                                             b into R4
+   19 0000000A         
+   20 0000000A F04F 0501       MOV              R5, #1      ; Initialize counte
+                                                            r i to 1
+   21 0000000E         
+   22 0000000E         calculate_lcm
+   23 0000000E FB05 F603       MUL              R6, R5, R3  ; Calculate i * a
+   24 00000012 4627            MOV              R7, R4      ; Copy b to R7
+   25 00000014 FBB6 F8F7       UDIV             R8, R6, R7  ; Divide (i * a) by
+                                                             b, quotient is in 
+                                                            R8
+   26 00000018 FB08 F907       MUL              R9, R8, R7  ; Calculate (i * a)
+                                                             - (i * a // b) * b
+                                                            
+   27 0000001C EBA6 0909       SUB              R9, R6, R9  ; R9 = (i * a) % b 
+                                                            (remainder)
+   28 00000020         
+   29 00000020 F1B9 0F00       CMP              R9, #0      ; Check if remainde
+                                                            r == 0
+   30 00000024 D002            BEQ              found_lcm   ; If zero, we found
+                                                             the LCM
+   31 00000026         
+   32 00000026 F105 0501       ADD              R5, R5, #1  ; Increment i
+   33 0000002A E7F0            B                calculate_lcm ; Repeat the proc
+                                                            ess
+   34 0000002C         
+   35 0000002C         found_lcm
+   36 0000002C 6016            STR              R6, [R2]    ; Store the result 
+                                                            (i * a)
+   37 0000002E         
+   38 0000002E         STOP
+   39 0000002E E7FE            B                STOP        ; Infinite loop to 
+                                                            stop the program
+   40 00000030         
+   41 00000030 00000000 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+              00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   42 00000000 0000000C 
+                       a       DCD              12          ; First number (cha
+                                                            nge as needed)
+   43 00000004 0000000F 
+                       b       DCD              15          ; Second number (ch
+                                                            ange as needed)
+   44 00000008         result
+   45 00000008 00000000        DCD              0           ; Reserve a word to
+                                                             store the result
+   46 0000000C         
+   47 0000000C                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=q4.d -oq
+4.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=q4.lst q4.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file q4.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file q4.asm
+   Uses
+      At line 2 in file q4.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file q4.asm
+   Uses
+      At line 5 in file q4.asm
+      At line 10 in file q4.asm
+
+STOP 0000002E
+
+Symbol: STOP
+   Definitions
+      At line 38 in file q4.asm
+   Uses
+      At line 39 in file q4.asm
+Comment: STOP used once
+calculate_lcm 0000000E
+
+Symbol: calculate_lcm
+   Definitions
+      At line 22 in file q4.asm
+   Uses
+      At line 33 in file q4.asm
+Comment: calculate_lcm used once
+found_lcm 0000002C
+
+Symbol: found_lcm
+   Definitions
+      At line 35 in file q4.asm
+   Uses
+      At line 30 in file q4.asm
+Comment: found_lcm used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file q4.asm
+   Uses
+      None
+Comment: mycode unused
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+a 00000000
+
+Symbol: a
+   Definitions
+      At line 42 in file q4.asm
+   Uses
+      At line 13 in file q4.asm
+Comment: a used once
+b 00000004
+
+Symbol: b
+   Definitions
+      At line 43 in file q4.asm
+   Uses
+      At line 14 in file q4.asm
+Comment: b used once
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 41 in file q4.asm
+   Uses
+      None
+Comment: mydata unused
+result 00000008
+
+Symbol: result
+   Definitions
+      At line 44 in file q4.asm
+   Uses
+      At line 15 in file q4.asm
+Comment: result used once
+4 symbols
+344 symbols in table

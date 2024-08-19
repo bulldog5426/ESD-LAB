@@ -1,0 +1,159 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 4804            LDR              R0, =num1   ; Load the address 
+                                                            of the first number
+                                                             into R0
+   14 00000002 4905            LDR              R1, =num2   ; Load the address 
+                                                            of the second numbe
+                                                            r into R1
+   15 00000004 4A05            LDR              R2, =result ; Load the address 
+                                                            where the result wi
+                                                            ll be stored into R
+                                                            2
+   16 00000006         
+   17 00000006 6803            LDR              R3, [R0]    ; Load the value of
+                                                             num1 into R3
+   18 00000008 680C            LDR              R4, [R1]    ; Load the value of
+                                                             num2 into R4
+   19 0000000A         
+   20 0000000A EBA3 0504       SUB              R5, R3, R4  ; Subtract num2 fro
+                                                            m num1, result in R
+                                                            5
+   21 0000000E 6015            STR              R5, [R2]    ; Store the result 
+                                                            in memory
+   22 00000010         
+   23 00000010         STOP
+   24 00000010 E7FE            B                STOP        ; Infinite loop to 
+                                                            stop the program
+   25 00000012         
+   26 00000012 00 00 00000000 
+              00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   27 00000000         num1
+   28 00000000 12345678        DCD              0x12345678  ; First 32-bit numb
+                                                            er (change as neede
+                                                            d)
+   29 00000004         num2
+   30 00000004 87654321        DCD              0x87654321  ; Second 32-bit num
+                                                            ber (change as need
+                                                            ed)
+   31 00000008         result
+   32 00000008 00000000        DCD              0           ; Reserve a word to
+                                                             store the result
+   33 0000000C         
+   34 0000000C                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=a1.d -oa
+1.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=a1.lst a1.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file a1.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file a1.asm
+   Uses
+      At line 2 in file a1.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file a1.asm
+   Uses
+      At line 5 in file a1.asm
+      At line 10 in file a1.asm
+
+STOP 00000010
+
+Symbol: STOP
+   Definitions
+      At line 23 in file a1.asm
+   Uses
+      At line 24 in file a1.asm
+Comment: STOP used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file a1.asm
+   Uses
+      None
+Comment: mycode unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 26 in file a1.asm
+   Uses
+      None
+Comment: mydata unused
+num1 00000000
+
+Symbol: num1
+   Definitions
+      At line 27 in file a1.asm
+   Uses
+      At line 13 in file a1.asm
+Comment: num1 used once
+num2 00000004
+
+Symbol: num2
+   Definitions
+      At line 29 in file a1.asm
+   Uses
+      At line 14 in file a1.asm
+Comment: num2 used once
+result 00000008
+
+Symbol: result
+   Definitions
+      At line 31 in file a1.asm
+   Uses
+      At line 15 in file a1.asm
+Comment: result used once
+4 symbols
+342 symbols in table

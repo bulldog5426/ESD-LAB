@@ -1,0 +1,235 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 480E            LDR              R0, =num1   ; Load the base add
+                                                            ress of the first 1
+                                                            28-bit number into 
+                                                            R0
+   14 00000002 490F            LDR              R1, =num2   ; Load the base add
+                                                            ress of the second 
+                                                            128-bit number into
+                                                             R1
+   15 00000004 4A0F            LDR              R2, =result ; Load the base add
+                                                            ress where the resu
+                                                            lt will be stored
+   16 00000006         
+   17 00000006 F04F 0400       MOV              R4, #0      ; Clear carry flag 
+                                                            (R4 = 0)
+   18 0000000A         
+   19 0000000A         ; Add the least significant 32-bit segment
+   20 0000000A 6805            LDR              R5, [R0]    ; Load the least si
+                                                            gnificant word of n
+                                                            um1
+   21 0000000C 680E            LDR              R6, [R1]    ; Load the least si
+                                                            gnificant word of n
+                                                            um2
+   22 0000000E 19AF            ADDS             R7, R5, R6  ; Add num1 and num2
+                                                            , store the result 
+                                                            in R7, set flags
+   23 00000010 F842 7B04       STR              R7, [R2], #4 ; Store the result
+                                                             and increment the 
+                                                            result pointer
+   24 00000014 F144 0400       ADC              R4, R4, #0  ; Add carry to R4 (
+                                                            if any), R4 now hol
+                                                            ds the carry
+   25 00000018         
+   26 00000018         ; Add the second 32-bit segment
+   27 00000018 6845            LDR              R5, [R0, #4] ; Load the second 
+                                                            word of num1
+   28 0000001A 684E            LDR              R6, [R1, #4] ; Load the second 
+                                                            word of num2
+   29 0000001C EB55 0706       ADCS             R7, R5, R6  ; Add num1, num2 an
+                                                            d carry, store the 
+                                                            result in R7
+   30 00000020 F842 7B04       STR              R7, [R2], #4 ; Store the result
+                                                             and increment the 
+                                                            result pointer
+   31 00000024         
+   32 00000024         ; Add the third 32-bit segment
+   33 00000024 6885            LDR              R5, [R0, #8] ; Load the third w
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            ord of num1
+   34 00000026 688E            LDR              R6, [R1, #8] ; Load the third w
+                                                            ord of num2
+   35 00000028 EB55 0706       ADCS             R7, R5, R6  ; Add num1, num2 an
+                                                            d carry, store the 
+                                                            result in R7
+   36 0000002C F842 7B04       STR              R7, [R2], #4 ; Store the result
+                                                             and increment the 
+                                                            result pointer
+   37 00000030         
+   38 00000030         ; Add the most significant 32-bit segment
+   39 00000030 68C5            LDR              R5, [R0, #12] ; Load the most s
+                                                            ignificant word of 
+                                                            num1
+   40 00000032 68CE            LDR              R6, [R1, #12] ; Load the most s
+                                                            ignificant word of 
+                                                            num2
+   41 00000034 EB55 0706       ADCS             R7, R5, R6  ; Add num1, num2 an
+                                                            d carry, store the 
+                                                            result in R7
+   42 00000038 6017            STR              R7, [R2]    ; Store the result 
+                                                            (no need to increme
+                                                            nt the pointer)
+   43 0000003A         
+   44 0000003A         STOP
+   45 0000003A E7FE            B                STOP        ; Infinite loop to 
+                                                            stop the program
+   46 0000003C         
+   47 0000003C 00000000 
+              00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   48 00000000         result
+   49 00000000 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00               SPACE            16          ; Reserve 16 bytes 
+                                                            (4 words) for the 1
+                                                            28-bit result
+   50 00000010         
+   51 00000010                 AREA             mycode, CODE, READONLY
+   52 00000048         num1
+   53 00000048 11111111 
+              22222222 
+              33333333 
+              44444444         DCD              0x11111111, 0x22222222, 0x33333
+333, 0x44444444 
+                                                            ; First 128-bit num
+                                                            ber
+   54 00000058         num2
+   55 00000058 AAAAAAAA 
+              BBBBBBBB 
+              CCCCCCCC 
+              DDDDDDDD         DCD              0xAAAAAAAA, 0xBBBBBBBB, 0xCCCCC
+CCC, 0xDDDDDDDD 
+                                                            ; Second 128-bit nu
+                                                            mber
+   56 00000068         
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   57 00000068                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=q2.d -oq
+2.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=q2.lst q2.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file q2.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file q2.asm
+   Uses
+      At line 2 in file q2.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file q2.asm
+   Uses
+      At line 5 in file q2.asm
+      At line 10 in file q2.asm
+
+STOP 0000003A
+
+Symbol: STOP
+   Definitions
+      At line 44 in file q2.asm
+   Uses
+      At line 45 in file q2.asm
+Comment: STOP used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file q2.asm
+   Uses
+      None
+Comment: mycode unused
+num1 00000048
+
+Symbol: num1
+   Definitions
+      At line 52 in file q2.asm
+   Uses
+      At line 13 in file q2.asm
+Comment: num1 used once
+num2 00000058
+
+Symbol: num2
+   Definitions
+      At line 54 in file q2.asm
+   Uses
+      At line 14 in file q2.asm
+Comment: num2 used once
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 47 in file q2.asm
+   Uses
+      None
+Comment: mydata unused
+result 00000000
+
+Symbol: result
+   Definitions
+      At line 48 in file q2.asm
+   Uses
+      At line 15 in file q2.asm
+Comment: result used once
+2 symbols
+342 symbols in table
