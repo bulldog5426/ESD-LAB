@@ -1,0 +1,202 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 4807            LDR              R0, =a      ; Load address of t
+                                                            he first number (a)
+                                                            
+   14 00000002 4908            LDR              R1, =b      ; Load address of t
+                                                            he second number (b
+                                                            )
+   15 00000004 4A08            LDR              R2, =result ; Load address wher
+                                                            e the result will b
+                                                            e stored
+   16 00000006         
+   17 00000006 6803            LDR              R3, [R0]    ; Load the value of
+                                                             a into R3
+   18 00000008 680C            LDR              R4, [R1]    ; Load the value of
+                                                             b into R4
+   19 0000000A         
+   20 0000000A         ; GCD calculation loop
+   21 0000000A         gcd_loop
+   22 0000000A 42A3            CMP              R3, R4      ; Compare a and b
+   23 0000000C D006            BEQ              done        ; If a == b, we are
+                                                             done
+   24 0000000E         
+   25 0000000E DC02            BGT              subtract_a  ; If a > b, subtrac
+                                                            t b from a
+   26 00000010 EBA4 0403       SUB              R4, R4, R3  ; Else subtract a f
+                                                            rom b
+   27 00000014 E7F9            B                gcd_loop    ; Repeat the loop
+   28 00000016         
+   29 00000016         subtract_a
+   30 00000016 EBA3 0304       SUB              R3, R3, R4  ; Subtract b from a
+                                                            
+   31 0000001A E7F6            B                gcd_loop    ; Repeat the loop
+   32 0000001C         
+   33 0000001C         done
+   34 0000001C 6013            STR              R3, [R2]    ; Store the result 
+                                                            (GCD) in memory
+   35 0000001E         
+   36 0000001E         STOP
+   37 0000001E E7FE            B                STOP        ; Infinite loop to 
+                                                            stop the program
+   38 00000020         
+   39 00000020 00000000 
+              00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   40 00000000 00000038 
+                       a       DCD              56          ; First number (cha
+                                                            nge as needed)
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   41 00000004 00000062 
+                       b       DCD              98          ; Second number (ch
+                                                            ange as needed)
+   42 00000008         result
+   43 00000008 00000000        DCD              0           ; Reserve a word to
+                                                             store the result
+   44 0000000C         
+   45 0000000C                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=a3.d -oa
+3.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=a3.lst a3.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file a3.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file a3.asm
+   Uses
+      At line 2 in file a3.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file a3.asm
+   Uses
+      At line 5 in file a3.asm
+      At line 10 in file a3.asm
+
+STOP 0000001E
+
+Symbol: STOP
+   Definitions
+      At line 36 in file a3.asm
+   Uses
+      At line 37 in file a3.asm
+Comment: STOP used once
+done 0000001C
+
+Symbol: done
+   Definitions
+      At line 33 in file a3.asm
+   Uses
+      At line 23 in file a3.asm
+Comment: done used once
+gcd_loop 0000000A
+
+Symbol: gcd_loop
+   Definitions
+      At line 21 in file a3.asm
+   Uses
+      At line 27 in file a3.asm
+      At line 31 in file a3.asm
+
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file a3.asm
+   Uses
+      None
+Comment: mycode unused
+subtract_a 00000016
+
+Symbol: subtract_a
+   Definitions
+      At line 29 in file a3.asm
+   Uses
+      At line 25 in file a3.asm
+Comment: subtract_a used once
+6 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+a 00000000
+
+Symbol: a
+   Definitions
+      At line 40 in file a3.asm
+   Uses
+      At line 13 in file a3.asm
+Comment: a used once
+b 00000004
+
+Symbol: b
+   Definitions
+      At line 41 in file a3.asm
+   Uses
+      At line 14 in file a3.asm
+Comment: b used once
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 39 in file a3.asm
+   Uses
+      None
+Comment: mydata unused
+result 00000008
+
+Symbol: result
+   Definitions
+      At line 42 in file a3.asm
+   Uses
+      At line 15 in file a3.asm
+Comment: result used once
+4 symbols
+345 symbols in table

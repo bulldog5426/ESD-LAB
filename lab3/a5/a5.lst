@@ -1,0 +1,225 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 4812            LDR              R0, =bcd1   ; Load address of t
+                                                            he first BCD number
+                                                             into R0
+   14 00000002 4913            LDR              R1, =bcd2   ; Load address of t
+                                                            he second BCD numbe
+                                                            r into R1
+   15 00000004 4A13            LDR              R2, =result ; Load address wher
+                                                            e the result will b
+                                                            e stored
+   16 00000006         
+   17 00000006 7803            LDRB             R3, [R0]    ; Load the first BC
+                                                            D number into R3
+   18 00000008 780C            LDRB             R4, [R1]    ; Load the second B
+                                                            CD number into R4
+   19 0000000A         
+   20 0000000A         ; Extract the upper and lower nibbles of BCD1
+   21 0000000A EA4F 1513       MOV              R5, R3, LSR #4 ; Extract upper 
+                                                            nibble of bcd1 (hig
+                                                            h BCD digit)
+   22 0000000E F003 030F       AND              R3, R3, #0x0F ; Extract lower n
+                                                            ibble of bcd1 (low 
+                                                            BCD digit)
+   23 00000012         
+   24 00000012         ; Extract the upper and lower nibbles of BCD2
+   25 00000012 EA4F 1614       MOV              R6, R4, LSR #4 ; Extract upper 
+                                                            nibble of bcd2 (hig
+                                                            h BCD digit)
+   26 00000016 F004 040F       AND              R4, R4, #0x0F ; Extract lower n
+                                                            ibble of bcd2 (low 
+                                                            BCD digit)
+   27 0000001A         
+   28 0000001A         ; Multiply the lower digits of both numbers
+   29 0000001A FB03 F704       MUL              R7, R3, R4  ; R7 = (low BCD1) *
+                                                             (low BCD2)
+   30 0000001E         
+   31 0000001E         ; Multiply the upper digit of BCD1 with the lower digit 
+                       of BCD2
+   32 0000001E FB05 7704       MLA              R7, R5, R4, R7 ; R7 += (high BC
+                                                            D1) * (low BCD2)
+   33 00000022         
+   34 00000022         ; Multiply the upper digit of BCD2 with the lower digit 
+                       of BCD1
+   35 00000022 FB06 7703       MLA              R7, R6, R3, R7 ; R7 += (high BC
+                                                            D2) * (low BCD1)
+   36 00000026         
+   37 00000026         ; Multiply the upper digits of both numbers
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   38 00000026 FB05 7706       MLA              R7, R5, R6, R7 ; R7 += (high BC
+                                                            D1) * (high BCD2)
+   39 0000002A         
+   40 0000002A         ; Adjust the result to BCD format using the carry
+   41 0000002A F04F 0800       MOV              R8, #0      ; Clear carry
+   42 0000002E         
+   43 0000002E         adjust_bcd
+   44 0000002E 2F64            CMP              R7, #100    ; Compare result wi
+                                                            th 100
+   45 00000030 BF24 3F64       SUBCS            R7, R7, #100 ; Subtract 100 if 
+                                                            carry
+   46 00000034 F108 0801       ADDCS            R8, R8, #1  ; Add carry to R8
+   47 00000038         
+   48 00000038 F1B8 0F0A       CMP              R8, #10     ; Compare upper nib
+                                                            ble with 10
+   49 0000003C DAF7            BGE              adjust_bcd  ; Repeat adjustment
+                                                             if greater than 9
+   50 0000003E         
+   51 0000003E         ; Store the result in BCD format
+   52 0000003E EA4F 1707       MOV              R7, R7, LSL #4 ; Shift result b
+                                                            y 4 bits to the lef
+                                                            t
+   53 00000042 EA47 0708       ORR              R7, R7, R8  ; Combine result wi
+                                                            th the carry
+   54 00000046 7017            STRB             R7, [R2]    ; Store the BCD res
+                                                            ult in memory
+   55 00000048         
+   56 00000048         STOP
+   57 00000048 E7FE            B                STOP        ; Infinite loop to 
+                                                            stop the program
+   58 0000004A         
+   59 0000004A 00 00 00000000 
+              00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   60 00000000         bcd1
+   61 00000000 12              DCB              0x12        ; First BCD number 
+                                                            (example: 12 in BCD
+                                                             format)
+   62 00000001         bcd2
+   63 00000001 34              DCB              0x34        ; Second BCD number
+                                                             (example: 34 in BC
+                                                            D format)
+   64 00000002         result
+   65 00000002 00              DCB              0x00        ; Reserve a byte to
+                                                             store the result i
+                                                            n BCD format
+   66 00000003         
+   67 00000003                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=a5.d -oa
+5.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=a5.lst a5.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file a5.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file a5.asm
+   Uses
+      At line 2 in file a5.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file a5.asm
+   Uses
+      At line 5 in file a5.asm
+      At line 10 in file a5.asm
+
+STOP 00000048
+
+Symbol: STOP
+   Definitions
+      At line 56 in file a5.asm
+   Uses
+      At line 57 in file a5.asm
+Comment: STOP used once
+adjust_bcd 0000002E
+
+Symbol: adjust_bcd
+   Definitions
+      At line 43 in file a5.asm
+   Uses
+      At line 49 in file a5.asm
+Comment: adjust_bcd used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file a5.asm
+   Uses
+      None
+Comment: mycode unused
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+bcd1 00000000
+
+Symbol: bcd1
+   Definitions
+      At line 60 in file a5.asm
+   Uses
+      At line 13 in file a5.asm
+Comment: bcd1 used once
+bcd2 00000001
+
+Symbol: bcd2
+   Definitions
+      At line 62 in file a5.asm
+   Uses
+      At line 14 in file a5.asm
+Comment: bcd2 used once
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 59 in file a5.asm
+   Uses
+      None
+Comment: mydata unused
+result 00000002
+
+Symbol: result
+   Definitions
+      At line 64 in file a5.asm
+   Uses
+      At line 15 in file a5.asm
+Comment: result used once
+4 symbols
+343 symbols in table
