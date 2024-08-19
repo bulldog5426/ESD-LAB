@@ -1,0 +1,196 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 480A            LDR              R0, =hex_num ; Load address of 
+                                                            the hexadecimal num
+                                                            ber
+   14 00000002 490B            LDR              R1, =ascii_result ; Load addres
+                                                            s of where to store
+                                                             ASCII result
+   15 00000004         
+   16 00000004 7802            LDRB             R2, [R0]    ; Load the 2-digit 
+                                                            hex number into R2
+   17 00000006         
+   18 00000006         ; Extract high nibble
+   19 00000006 EA4F 1312       MOV              R3, R2, LSR #4 ; Shift right to
+                                                             get the high nibbl
+                                                            e into R3
+   20 0000000A F000 F807       BL               HexToASCII  ; Convert high nibb
+                                                            le to ASCII
+   21 0000000E 700B            STRB             R3, [R1]    ; Store ASCII resul
+                                                            t
+   22 00000010         
+   23 00000010         ; Extract low nibble
+   24 00000010 F002 020F       AND              R2, R2, #0x0F ; Mask out the lo
+                                                            w nibble in R2
+   25 00000014 F000 F802       BL               HexToASCII  ; Convert low nibbl
+                                                            e to ASCII
+   26 00000018 704A            STRB             R2, [R1, #1] ; Store the second
+                                                             ASCII result
+   27 0000001A         
+   28 0000001A         STOP
+   29 0000001A E7FE            B                STOP        ; Infinite loop to 
+                                                            stop the program
+   30 0000001C         
+   31 0000001C         ; Function: Convert a hexadecimal nibble (0-15) into an 
+                       ASCII value
+   32 0000001C         HexToASCII
+   33 0000001C 2B09            CMP              R3, #9      ; Compare the nibbl
+                                                            e with 9
+   34 0000001E DD02            BLE              convert_digit ; If <= 9, it's a
+                                                             number (0-9)
+   35 00000020         
+   36 00000020         ; Convert letters A-F (nibbles 0xA - 0xF)
+   37 00000020 F103 0337       ADD              R3, R3, #0x37 ; Convert nibble 
+                                                            to ASCII letter (A-
+                                                            F)
+   38 00000024         
+   39 00000024 4770            BX               LR          ; Return from subro
+                                                            utine
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   40 00000026         
+   41 00000026         convert_digit
+   42 00000026 F103 0330       ADD              R3, R3, #0x30 ; Convert nibble 
+                                                            to ASCII number (0-
+                                                            9)
+   43 0000002A 4770            BX               LR          ; Return from subro
+                                                            utine
+   44 0000002C         
+   45 0000002C 00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   46 00000000         hex_num
+   47 00000000 3A              DCB              0x3A        ; Example 2-digit h
+                                                            ex number (0x3A)
+   48 00000001         ascii_result
+   49 00000001 00 00           DCB              0x00, 0x00  ; Reserve 2 bytes f
+                                                            or ASCII result
+   50 00000003         
+   51 00000003                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=q1.d -oq
+1.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=q1.lst q1.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file q1.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file q1.asm
+   Uses
+      At line 2 in file q1.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+HexToASCII 0000001C
+
+Symbol: HexToASCII
+   Definitions
+      At line 32 in file q1.asm
+   Uses
+      At line 20 in file q1.asm
+      At line 25 in file q1.asm
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file q1.asm
+   Uses
+      At line 5 in file q1.asm
+      At line 10 in file q1.asm
+
+STOP 0000001A
+
+Symbol: STOP
+   Definitions
+      At line 28 in file q1.asm
+   Uses
+      At line 29 in file q1.asm
+Comment: STOP used once
+convert_digit 00000026
+
+Symbol: convert_digit
+   Definitions
+      At line 41 in file q1.asm
+   Uses
+      At line 34 in file q1.asm
+Comment: convert_digit used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file q1.asm
+   Uses
+      None
+Comment: mycode unused
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ascii_result 00000001
+
+Symbol: ascii_result
+   Definitions
+      At line 48 in file q1.asm
+   Uses
+      At line 14 in file q1.asm
+Comment: ascii_result used once
+hex_num 00000000
+
+Symbol: hex_num
+   Definitions
+      At line 46 in file q1.asm
+   Uses
+      At line 13 in file q1.asm
+Comment: hex_num used once
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 45 in file q1.asm
+   Uses
+      None
+Comment: mydata unused
+3 symbols
+343 symbols in table

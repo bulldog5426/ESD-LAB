@@ -1,0 +1,191 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 480A            LDR              R0, =hex_num ; Load the address
+                                                             of the hexadecimal
+                                                             number
+   14 00000002 490B            LDR              R1, =bcd_result ; Load the addr
+                                                            ess to store the BC
+                                                            D result
+   15 00000004         
+   16 00000004 7802            LDRB             R2, [R0]    ; Load the 2-digit 
+                                                            hex number into R2
+   17 00000006 F04F 0300       MOV              R3, #0      ; Initialize R3 to 
+                                                            hold the decimal eq
+                                                            uivalent
+   18 0000000A         
+   19 0000000A         ; Convert hexadecimal to decimal
+   20 0000000A F04F 0400       MOV              R4, #0      ; Initialize R4 for
+                                                             result
+   21 0000000E F04F 050A       MOV              R5, #10     ; Initialize base 1
+                                                            0 for decimal divis
+                                                            ion
+   22 00000012         
+   23 00000012         convert_loop
+   24 00000012 2A00            CMP              R2, #0      ; Check if the hex 
+                                                            number is zero
+   25 00000014 D007            BEQ              conversion_done ; If zero, we'r
+                                                            e done converting
+   26 00000016         
+   27 00000016 FBB2 F6F5       UDIV             R6, R2, R5  ; Divide R2 by 10 (
+                                                            R6 = R2 / 10)
+   28 0000001A FB06 2715       MLS              R7, R6, R5, R2 ; R7 = R2 - (R6 
+                                                            * 10) -> remainder
+   29 0000001E EA43 1307       ORR              R3, R3, R7, LSL #4 ; Shift the 
+                                                            remainder and store
+                                                             it in R3
+   30 00000022 4632            MOV              R2, R6      ; Set R2 to the quo
+                                                            tient for the next 
+                                                            iteration
+   31 00000024 E7F5            B                convert_loop 
+                                                            ; Continue the loop
+                                                            
+   32 00000026         
+   33 00000026         conversion_done
+   34 00000026 700B            STRB             R3, [R1]    ; Store the resulti
+                                                            ng BCD in memory
+   35 00000028         
+   36 00000028         STOP
+   37 00000028 E7FE            B                STOP        ; Infinite loop to 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                            stop the program
+   38 0000002A         
+   39 0000002A 00 00 00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   40 00000000         hex_num
+   41 00000000 3A              DCB              0x3A        ; Example 2-digit h
+                                                            ex number (0x3A = 5
+                                                            8 in decimal)
+   42 00000001         bcd_result
+   43 00000001 00              DCB              0x00        ; Reserve a byte to
+                                                             store the BCD resu
+                                                            lt
+   44 00000002         
+   45 00000002                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=q3.d -oq
+3.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=q3.lst q3.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file q3.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file q3.asm
+   Uses
+      At line 2 in file q3.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file q3.asm
+   Uses
+      At line 5 in file q3.asm
+      At line 10 in file q3.asm
+
+STOP 00000028
+
+Symbol: STOP
+   Definitions
+      At line 36 in file q3.asm
+   Uses
+      At line 37 in file q3.asm
+Comment: STOP used once
+conversion_done 00000026
+
+Symbol: conversion_done
+   Definitions
+      At line 33 in file q3.asm
+   Uses
+      At line 25 in file q3.asm
+Comment: conversion_done used once
+convert_loop 00000012
+
+Symbol: convert_loop
+   Definitions
+      At line 23 in file q3.asm
+   Uses
+      At line 31 in file q3.asm
+Comment: convert_loop used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file q3.asm
+   Uses
+      None
+Comment: mycode unused
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+bcd_result 00000001
+
+Symbol: bcd_result
+   Definitions
+      At line 42 in file q3.asm
+   Uses
+      At line 14 in file q3.asm
+Comment: bcd_result used once
+hex_num 00000000
+
+Symbol: hex_num
+   Definitions
+      At line 40 in file q3.asm
+   Uses
+      At line 13 in file q3.asm
+Comment: hex_num used once
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 39 in file q3.asm
+   Uses
+      None
+Comment: mydata unused
+3 symbols
+343 symbols in table

@@ -1,0 +1,187 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 480A            LDR              R0, =unpacked_num ; Load the ad
+                                                            dress of the unpack
+                                                            ed number
+   14 00000002 490B            LDR              R1, =packed_num ; Load the addr
+                                                            ess where the packe
+                                                            d result will be st
+                                                            ored
+   15 00000004         
+   16 00000004 F04F 0204       MOV              R2, #4      ; Set counter for 4
+                                                             bytes (32-bit numb
+                                                            er)
+   17 00000008         
+   18 00000008         pack_loop
+   19 00000008 F810 3B01       LDRB             R3, [R0], #1 ; Load the first u
+                                                            npacked digit (high
+                                                             nibble)
+   20 0000000C F810 4B01       LDRB             R4, [R0], #1 ; Load the second 
+                                                            unpacked digit (low
+                                                             nibble)
+   21 00000010         
+   22 00000010         ; Convert ASCII digits ('0'-'9') to hex values
+   23 00000010 F1A3 0330       SUB              R3, R3, #0x30 ; Convert first A
+                                                            SCII digit to binar
+                                                            y (high nibble)
+   24 00000014 F1A4 0430       SUB              R4, R4, #0x30 ; Convert second 
+                                                            ASCII digit to bina
+                                                            ry (low nibble)
+   25 00000018         
+   26 00000018 EA4F 1303       LSL              R3, R3, #4  ; Shift the high ni
+                                                            bble left by 4 bits
+                                                            
+   27 0000001C EA43 0304       ORR              R3, R3, R4  ; Combine high and 
+                                                            low nibbles
+   28 00000020         
+   29 00000020 F801 3B01       STRB             R3, [R1], #1 ; Store the packed
+                                                             byte in memory
+   30 00000024         
+   31 00000024 1E52            SUBS             R2, R2, #1  ; Decrement counter
+                                                            
+   32 00000026 D1EF            BNE              pack_loop   ; Repeat until all 
+                                                            digits are processe
+                                                            d
+   33 00000028         
+   34 00000028         STOP
+   35 00000028 E7FE            B                STOP        ; Infinite loop to 
+                                                            stop execution
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   36 0000002A         
+   37 0000002A 00 00 00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   38 00000000         unpacked_num
+   39 00000000 31 32 33 
+              34 35 36 
+              37 38            DCB              "1", "2", "3", "4", "5", "6", "
+7", "8" 
+                                                            ; Unpacked 32-bit n
+                                                            umber in ASCII form
+                                                            
+   40 00000008         packed_num
+   41 00000008 00 00 00 
+              00               DCB              0x00, 0x00, 0x00, 0x00 ; Reserv
+                                                            e space for the pac
+                                                            ked 32-bit number
+   42 0000000C         
+   43 0000000C                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=a2.d -oa
+2.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=a2.lst a2.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file a2.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file a2.asm
+   Uses
+      At line 2 in file a2.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file a2.asm
+   Uses
+      At line 5 in file a2.asm
+      At line 10 in file a2.asm
+
+STOP 00000028
+
+Symbol: STOP
+   Definitions
+      At line 34 in file a2.asm
+   Uses
+      At line 35 in file a2.asm
+Comment: STOP used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file a2.asm
+   Uses
+      None
+Comment: mycode unused
+pack_loop 00000008
+
+Symbol: pack_loop
+   Definitions
+      At line 18 in file a2.asm
+   Uses
+      At line 32 in file a2.asm
+Comment: pack_loop used once
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 37 in file a2.asm
+   Uses
+      None
+Comment: mydata unused
+packed_num 00000008
+
+Symbol: packed_num
+   Definitions
+      At line 40 in file a2.asm
+   Uses
+      At line 14 in file a2.asm
+Comment: packed_num used once
+unpacked_num 00000000
+
+Symbol: unpacked_num
+   Definitions
+      At line 38 in file a2.asm
+   Uses
+      At line 13 in file a2.asm
+Comment: unpacked_num used once
+3 symbols
+342 symbols in table

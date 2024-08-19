@@ -1,0 +1,214 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             RESET, DATA, READONLY
+    2 00000000                 EXPORT           __Vectors
+    3 00000000         __Vectors
+    4 00000000 10001000        DCD              0x10001000  ; Stack pointer val
+                                                            ue, stack is empty
+    5 00000004 00000000        DCD              Reset_Handler ; Reset vector
+    6 00000008                 ALIGN
+    7 00000008         
+    8 00000008                 AREA             mycode, CODE, READONLY
+    9 00000000                 ENTRY
+   10 00000000                 EXPORT           Reset_Handler
+   11 00000000         
+   12 00000000         Reset_Handler
+   13 00000000 480B            LDR              R0, =ascii_num ; Load address o
+                                                            f the ASCII unpacke
+                                                            d hex digits
+   14 00000002 490C            LDR              R1, =packed_hex ; Load address 
+                                                            to store the packed
+                                                             hex result
+   15 00000004         
+   16 00000004 7802            LDRB             R2, [R0]    ; Load the first AS
+                                                            CII digit into R2 (
+                                                            high nibble)
+   17 00000006 7843            LDRB             R3, [R0, #1] ; Load the second 
+                                                            ASCII digit into R3
+                                                             (low nibble)
+   18 00000008         
+   19 00000008         ; Convert ASCII high nibble ('0'-'9', 'A'-'F') to hex va
+                       lue
+   20 00000008 F000 F80A       BL               ConvertASCIIToHex ; Call subrou
+                                                            tine for high nibbl
+                                                            e
+   21 0000000C 4614            MOV              R4, R2      ; Store high nibble
+                                                             in R4
+   22 0000000E EA4F 1404       LSL              R4, R4, #4  ; Shift high nibble
+                                                             left by 4 bits to 
+                                                            make space for low 
+                                                            nibble
+   23 00000012         
+   24 00000012         ; Convert ASCII low nibble ('0'-'9', 'A'-'F') to hex val
+                       ue
+   25 00000012 461A            MOV              R2, R3      ; Move low nibble i
+                                                            nto R2 for conversi
+                                                            on
+   26 00000014 F000 F804       BL               ConvertASCIIToHex ; Call subrou
+                                                            tine for low nibble
+                                                            
+   27 00000018         
+   28 00000018         ; Combine high and low nibbles into packed hex
+   29 00000018 EA44 0402       ORR              R4, R4, R2  ; Combine the high 
+                                                            nibble in R4 with t
+                                                            he low nibble in R2
+                                                            
+   30 0000001C         
+   31 0000001C         ; Store the packed hex result
+   32 0000001C 700C            STRB             R4, [R1]    ; Store the packed 
+                                                            hexadecimal value i
+                                                            n memory
+   33 0000001E         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   34 0000001E         STOP
+   35 0000001E E7FE            B                STOP        ; Infinite loop to 
+                                                            stop execution
+   36 00000020         
+   37 00000020         ; Subroutine: Convert ASCII hex digit to binary hex valu
+                       e
+   38 00000020         ConvertASCIIToHex
+   39 00000020 2A39            CMP              R2, #'9'    ; Compare with '9'
+   40 00000022 D902            BLS              is_digit    ; If <= '9', it's a
+                                                             digit (0-9)
+   41 00000024 F1A2 0237       SUB              R2, R2, #0x37 ; Convert 'A'-'F'
+                                                             to 0xA-0xF (subtra
+                                                            ct 0x37 for upperca
+                                                            se)
+   42 00000028 4770            BX               LR          ; Return from subro
+                                                            utine
+   43 0000002A         
+   44 0000002A         is_digit
+   45 0000002A F1A2 0230       SUB              R2, R2, #0x30 ; Convert '0'-'9'
+                                                             to 0x0-0x9 (subtra
+                                                            ct 0x30)
+   46 0000002E 4770            BX               LR          ; Return from subro
+                                                            utine
+   47 00000030         
+   48 00000030 00000000 
+              00000000         AREA             mydata, DATA, READWRITE
+   49 00000000         ascii_num
+   50 00000000 33 41           DCB              "3", "A"    ; ASCII unpacked fo
+                                                            rm of hex number '3
+                                                            A'
+   51 00000002         packed_hex
+   52 00000002 00              DCB              0x00        ; Reserve a byte to
+                                                             store the packed h
+                                                            ex result
+   53 00000003         
+   54 00000003                 END
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=a1.d -oa
+1.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\NXP\LP
+C17xx --predefine="__EVAL SETA 1" --list=a1.lst a1.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 1 in file a1.asm
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 3 in file a1.asm
+   Uses
+      At line 2 in file a1.asm
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ConvertASCIIToHex 00000020
+
+Symbol: ConvertASCIIToHex
+   Definitions
+      At line 38 in file a1.asm
+   Uses
+      At line 20 in file a1.asm
+      At line 26 in file a1.asm
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 12 in file a1.asm
+   Uses
+      At line 5 in file a1.asm
+      At line 10 in file a1.asm
+
+STOP 0000001E
+
+Symbol: STOP
+   Definitions
+      At line 34 in file a1.asm
+   Uses
+      At line 35 in file a1.asm
+Comment: STOP used once
+is_digit 0000002A
+
+Symbol: is_digit
+   Definitions
+      At line 44 in file a1.asm
+   Uses
+      At line 40 in file a1.asm
+Comment: is_digit used once
+mycode 00000000
+
+Symbol: mycode
+   Definitions
+      At line 8 in file a1.asm
+   Uses
+      None
+Comment: mycode unused
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ascii_num 00000000
+
+Symbol: ascii_num
+   Definitions
+      At line 49 in file a1.asm
+   Uses
+      At line 13 in file a1.asm
+Comment: ascii_num used once
+mydata 00000000
+
+Symbol: mydata
+   Definitions
+      At line 48 in file a1.asm
+   Uses
+      None
+Comment: mydata unused
+packed_hex 00000002
+
+Symbol: packed_hex
+   Definitions
+      At line 51 in file a1.asm
+   Uses
+      At line 14 in file a1.asm
+Comment: packed_hex used once
+3 symbols
+343 symbols in table
