@@ -1,0 +1,9 @@
+esd.o: esd.c
+esd.o: C:\Keil\ARM\Inc\NXP\LPC17xx\LPC17xx.h
+esd.o: C:\Keil\ARM\CMSIS\Include\core_cm3.h
+esd.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+esd.o: C:\Keil\ARM\CMSIS\Include\core_cmInstr.h
+esd.o: C:\Keil\ARM\CMSIS\Include\core_cmFunc.h
+esd.o: C:\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h
+esd.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+esd.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
